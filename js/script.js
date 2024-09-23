@@ -21,6 +21,10 @@ window.addEventListener("load", function () {
       TODAY_GOOD = obj.todaygood;
       // 세일물품
       SALE_GOOD = obj.salegood;
+      // 새물품
+      NEW_GOOD = obj.newgood;
+      // 추천물품
+      RECOMMEND_GOOD = obj.recommendgood;
 
       //   console.log(VISUAL_ARR);
       // ================
@@ -29,6 +33,10 @@ window.addEventListener("load", function () {
       showTodayGood();
       // 세일물품 화면 배치
       showSaleGood();
+      //새물품 화면 배치
+      showNewGood();
+      //추천 물품 화면 배치
+      showRecommendGood();
     }
   };
   //   자료호출
@@ -45,6 +53,14 @@ window.addEventListener("load", function () {
   // 세일 물품
   let SALE_GOOD;
   let saleTag = this.document.getElementById("data-sale");
+  // 새물품
+  let NEW_GOOD;
+  let newTag = this.document.getElementById("data-new");
+  let newTagList = this.document.getElementById("data-new-list");
+  // 추천물품
+  let RECOMMEND_GOOD;
+  let recommendTag = this.document.getElementById("data-recommend");
+  
   // ==============================================
   // 비주얼 화면 출력 기능
   function showVisual() {
@@ -165,14 +181,15 @@ window.addEventListener("load", function () {
   }
   // 세일물품 화면 출력 기능
   function showSaleGood() {
+    // 세일물품 화면 출력 기능
+
     let html = `
      <div class="swiper sw-sale">
     <div class="swiper-wrapper">
     `;
-    SALE_GOOD.forEach(function(item){
+    SALE_GOOD.forEach(function (item) {
       // console.log(item);
-      let tag = 
-      `
+      let tag = `
       <div class= "swiper-slide">
 <div class="good-box">
 <!-- 제품이미지 -->
@@ -192,18 +209,16 @@ window.addEventListener("load", function () {
 <button class="good-add-cart"></button>
 </div>
 </div>
-      `
-      html += tag
-      
-    })
-    html += 
-    `
+      `;
+      html += tag;
+    });
+    html += `
     </div>
     </div>
-    `
-    saleTag.innerHTML = html
-    // 스와이퍼 기능 
-    const swSale = new Swiper(".sw-sale" , {
+    `;
+    saleTag.innerHTML = html;
+    // 스와이퍼 기능
+    const swSale = new Swiper(".sw-sale", {
       slidesPerView: 3, // 보여지는 슬라이드 개수
       spaceBetween: 16, // 슬라이드 간의 간격
       slidesPerGroup: 3, // 넘어가는 슬라이드 개수
@@ -216,9 +231,101 @@ window.addEventListener("load", function () {
         el: ".sale .slide-pg",
         type: "fraction", // type을 하지 않으면 점으로 나옴.
       },
+    });
+  }
+  // 새 물품 화면 출력 기능
+  function showNewGood() {
+    // 첫번째 화면출력 (왼쪽)
+    let obj = NEW_GOOD[0];
+    // console.log(NEW_GOOD);
+    let newgoodFirst = `
+    <a href="${obj.link}" class="new-img">
+  <img src="images/${obj.pic}" alt="${obj.title}"/>
+</a>
+<a href="${obj.link}" class="new-title">
+  ${obj.title}
+</a>
+<a href="${obj.link}" class="new-txt">
+  ${obj.txt}
+</a>
+    `;
+    newTag.innerHTML = newgoodFirst;
 
-    })
+    // 두번째 화면출력 (오른쪽)
+    let html = "";
+    NEW_GOOD.forEach(function (item, index) {
+      // console.log(item);
+      let tag = ""
+      if (index !== 0) {
+        tag = `
+         <div class="new-box">
+      <a href="${item.link}" class="new-box-img">
+          <img src="images/${item.pic}" alt="${item.title}"/>
+      </a>
+      <a href="${item.link}" class="new-box-title">
+          ${item.title}
+      </a>
+  </div>
+        `;
+      }
+      html += tag
+    });
+    newTagList.innerHTML = html
   }
 
+    // 추천물품 화면 출력 기능
+    function showRecommendGood() {
+      // 추천물품 화면 출력 기능
+  
+      let html = `
+       <div class="swiper sw-recommend">
+      <div class="swiper-wrapper">
+      `;
+      RECOMMEND_GOOD.forEach(function (item) {
+        // console.log(item);
+        let tag = `
+        <div class= "swiper-slide">
+  <div class="good-box">
+  <!-- 제품이미지 -->
+  <a href="${item.link}" class="good-img">
+      <img src="images/${item.pic}" alt="${item.name}">
+      <span class="good-type">${item.tag}</span>
+  </a>
+  <!-- 제품정보 -->
+  <a href="${item.link}" class="good-info">
+      <em>${item.name}</em>(<em>${item.unit}</em>)
+  </a>
+  <!-- 제품가격 -->
+  <a href="${item.link}" class="good-info-price">
+      ${priceToString(item.price)}<em>원</em>
+  </a>
+  <!-- 장바구니 이미지 -->
+  <button class="good-add-cart"></button>
+  </div>
+  </div>
+        `;
+        html += tag;
+      });
+      html += `
+      </div>
+      </div>
+      `;
+      recommendTag.innerHTML = html;
+      // 스와이퍼 기능
+      const swRecommend = new Swiper(".sw-recommend", {
+        slidesPerView: 3, // 보여지는 슬라이드 개수
+        spaceBetween: 16, // 슬라이드 간의 간격
+        slidesPerGroup: 3, // 넘어가는 슬라이드 개수
+        navigation: {
+          prevEl: ".recommend .slide-prev",
+          nextEl: ".recommend .slide-next",
+        },
+        pagination: {
+          // 페이지 수 출력됨.
+          el: ".recommend .slide-pg",
+          type: "fraction", // type을 하지 않으면 점으로 나옴.
+        },
+      });
+    }
   //   ==========================end
 });
