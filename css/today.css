@@ -77,3 +77,7 @@ transition:all 0.5s ;
     font-size: 17px;
     font-style: normal;
 }
+
+.no-mb{
+    margin-bottom: 0;
+}
