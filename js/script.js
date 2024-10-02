@@ -381,6 +381,47 @@ window.addEventListener("load", function () {
         nextEl: ".popular-cate .popular-slide-next",
       },
     });
+    // 아이콘에 클릭했을때 해당하는 목록 이벤트
+  const tag = document.querySelectorAll(".popular-slide a")
+  tag[1].style.border = "2px solid #76bd42"
+  tag.forEach(function(item,index){
+    // console.log(item,index);
+    //아이콘에 호버했을때 이미지 변경
+    item.addEventListener("mouseover" ,function(){
+      const spanTag = this.querySelector(".popular-cate-icon")
+      spanTag.style.backgroundPositionY = "-64px"
+    })
+    item.addEventListener("mouseleave" ,function(){
+      const spanTag = this.querySelector(".popular-cate-icon")
+      spanTag.style.backgroundPositionY = "0px"
+    })
+
+    // 아이콘에 클릭했을 때 목록 변경
+    item.addEventListener("click", function(e){
+      e.preventDefault()
+      // alert("click")
+      // 물품더보기 이름 변경
+      const bt = document.querySelector(".popular-more")
+      const title = this.querySelector(".popular-cate-name")
+      // console.log(title);
+      bt.innerHTML = `${title.innerHTML} 물품 더보기`
+      // 클릭된 아이콘의 테두리변경
+      tag.forEach(function(item){
+        item.style.border = "none"
+        // const spanTag
+      })
+      this.style.backgroundColor = "#fff"
+      this.style.border = "2px solid #76bd42"
+      popularShow = index
+      // icon에 해당하는 목록이 출력
+      showPopularGood()
+    })
+
+    
+  })
+
+
+  // ======================
   }
   // 인기물품 화면 출력 기능
   function showPopularGood() {
