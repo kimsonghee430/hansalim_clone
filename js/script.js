@@ -35,6 +35,8 @@ window.addEventListener("load", function () {
       BRAND_ARR = obj.brandarr;
       // 배너
       BANNER_ARR = obj.bannerarr;
+      // 제철요리
+      SEASON_GOOD = obj.seasongood;
       // ================
 
       // 비주얼을 화면에 배치
@@ -55,6 +57,8 @@ window.addEventListener("load", function () {
       showBrandArr();
       // 배너 화면배치
       showBannerArr();
+      // 제철요리 화면 배치
+      showSeasonGood();
     }
   };
   //   자료호출
@@ -93,6 +97,9 @@ window.addEventListener("load", function () {
   // 배너 목록
   let BANNER_ARR;
   let bannerTag = this.document.getElementById("data-banner");
+  // 제철요리 목록
+  let SEASON_ARR;
+  let seasonTag = this.document.getElementById("data-season");
   // ==============================================
   // 비주얼 화면 출력 기능
   function showVisual() {
@@ -398,10 +405,14 @@ window.addEventListener("load", function () {
     });
     // 아이콘에 클릭했을때 해당하는 목록 이벤트
     const tag = document.querySelectorAll(".popular-slide a");
+
+    // 첫 번째 아이콘 활성화
     tag[1].style.border = "2px solid #76bd42";
+    tag[1].style.backgroundColor = "#fff"; // 배경색을 흰색으로 설정
     const firstIconSpanTag = tag[1].querySelector(".popular-cate-icon");
     if (firstIconSpanTag) {
       firstIconSpanTag.style.backgroundPositionY = "-64px";
+      firstIconSpanTag.classList.add("active"); // 첫 번째 아이콘은 처음부터 활성화 상태
     }
 
     tag.forEach(function (item, index) {
@@ -410,6 +421,8 @@ window.addEventListener("load", function () {
         const spanTag = this.querySelector(".popular-cate-icon");
         if (!spanTag.classList.contains("active")) {
           spanTag.style.backgroundPositionY = "-64px";
+          this.style.backgroundColor = "#fff"; // 호버 시 배경색을 흰색으로 설정
+          this.style.border = "2px solid #76bd42"; // 호버 시 테두리 색상 변경
         }
       });
 
@@ -418,6 +431,13 @@ window.addEventListener("load", function () {
         const spanTag = this.querySelector(".popular-cate-icon");
         if (!spanTag.classList.contains("active")) {
           spanTag.style.backgroundPositionY = "0px";
+          this.style.backgroundColor = ""; // 원래 배경색으로 복원
+          this.style.border = "none"; // 원래 테두리로 복원
+        }
+        // tag[1]에 대해서는 마우스 리브 동작 무시
+        // tag[1]이 활성화 상태가 아니면 마우스 리브 기능 적용
+        if (item === tag[1] && spanTag.classList.contains("active")) {
+          return; // tag[1]이 활성화 상태면 무시
         }
       });
 
@@ -436,10 +456,12 @@ window.addEventListener("load", function () {
           const otherSpanTag = item.querySelector(".popular-cate-icon");
           if (otherSpanTag) {
             otherSpanTag.style.backgroundPositionY = "0px";
+            item.style.backgroundColor = "#f9f9f9";
             otherSpanTag.classList.remove("active");
           }
         });
 
+        // 현재 클릭된 아이콘을 활성화
         this.style.backgroundColor = "#fff";
         this.style.border = "2px solid #76bd42";
         const spanTag = this.querySelector(".popular-cate-icon");
@@ -522,7 +544,7 @@ window.addEventListener("load", function () {
     </div>
     `;
     brandTag.innerHTML = html;
-    const swBrand = new Swiper(".sw-brand" ,{
+    const swBrand = new Swiper(".sw-brand", {
       slidesPerView: 3, // 보여지는 슬라이드 개수
       spaceBetween: 16, // 슬라이드 간의 간격
       slidesPerGroup: 1, // 넘어가는 슬라이드 개수
@@ -534,43 +556,71 @@ window.addEventListener("load", function () {
         el: ".brand .slide-pg",
         type: "fraction",
       },
-    })
+    });
   }
 
- // 배너 화면 출력 기능
- function showBannerArr() {
-  let html = `
+  // 배너 화면 출력 기능
+  function showBannerArr() {
+    let html = `
    <div class = "swiper sw-banner">
 <div class = "swiper-wrapper">
   `;
-  BANNER_ARR.forEach(function (item) {
-    // console.log(item);
-    let tag = `
+    BANNER_ARR.forEach(function (item) {
+      // console.log(item);
+      let tag = `
     <div class="swiper-slide">
           <a href="${item.link}">
               <img src = "images/${item.image}" alt ="${item.title}"/>
           </a>
       </div>
     `;
-    html += tag;
-  });
-  html += `
+      html += tag;
+    });
+    html += `
   </div>
   </div>
   `;
-  bannerTag.innerHTML = html;
-  const swBanner = new Swiper(".sw-banner" ,{
-    loop: true,
-    autoplay: {
-      delay: 2500,
-    },
-    slidesPerView: 2,
-    spaceBetween: 0,
-    navigation: {
-      prevEl: ".banner .slide-prev",
-      nextEl: ".banner .slide-next",
-    },
-  })
-}
+    bannerTag.innerHTML = html;
+    const swBanner = new Swiper(".sw-banner", {
+      loop: true,
+      autoplay: {
+        delay: 2500,
+      },
+      slidesPerView: 2,
+      spaceBetween: 0,
+      navigation: {
+        prevEl: ".banner .slide-prev",
+        nextEl: ".banner .slide-next",
+      },
+    });
+  }
+
+  // 제철요리 화면 출력 기능
+  function showSeasonGood() {
+    let html = "";
+    SEASON_GOOD.forEach(function (item, index) {
+      // console.log(item,index);
+      const tag = `
+  <li>
+                    <div class="season-good clearfix">
+                      <input type="checkbox" id="ch${index}" class="season-good-check season-item" value="${item.price}">
+                      <label for="ch${index}" class="season-label"></label>
+                      <a href="${item.link}" class="season-good-img">
+                        <img src="images/${item.pic}" alt="${item.title}">
+                      </a>
+                      <p class="season-good-info">
+                        <a href="${item.link}" class="season-good-title">${item.title}</a>
+                        <a href="${item.link}" class="season-good-price">
+                            <em>${priceToString(item.price)}</em>원
+                        </a>
+                      </p>
+                    </div>
+                   </li>
+    `;
+      html += tag;
+    });
+    seasonTag.innerHTML = html;
+    Scrollbar.initAll(); // smooth scrollbar 적용
+  }
   //   ==========================end
 });
