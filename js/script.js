@@ -683,7 +683,6 @@ window.addEventListener("load", function () {
     // console.log(buyTotalCount);
     // 총가격을 전역변수에 저장
     buyTotalMoneyPrice = priceTotal;
-    // console.log(buyTotalMoneyPrice);
     // 체크된 갯수만큼 갯수 변경
     buyTotal.innerHTML = buyTotalCount
     // 체크된 갯수만큼 금액 변경
